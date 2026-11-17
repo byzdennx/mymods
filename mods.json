@@ -1,0 +1,30 @@
+{
+  "mods": [
+    {
+      "id": "m1",
+      "name": "GTA:SA",
+      "app": "Android",
+      "ver": "v2.11",
+      "size": "7GB+",
+      "cat": "game",
+      "glyph": "GTA:SA",
+      "icon": "",
+      "tag": "Game",
+      "tagAlt": false,
+      "desc": "",
+      "long": "",
+      "mods": ["Unlock semua sirkuit", "Semua mobil terbuka", "Tanpa iklan", "Efek neon enhanced"],
+      "url": "https://example.com/download/neon-drift-v3.1.2.apk",
+      "updated": "2 hari lalu",
+      "sha256": "a3f9c2e1b7d84f0a6c5e9b2d1f7a8c3e4b6d0f2a9c1e5b7d3f8a0c2e4b6d1f9a"
+    }
+  ],
+  "library": [
+    { "modId": "", "status": "" },
+  ],
+  "stats": {
+    "modsTotal": 2,
+    "contributors": 0,
+    "updateCycle": "mingguan"
+  }
+}
