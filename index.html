@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyMods — Mod Aplikasi & Game</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --ink:#14120e; --paper:#f2ede2; --paper-2:#e8e1d2;
+    --line:#14120e; --accent:#d94f2b; --accent-2:#1f6f5c;
+    --muted:#6b6457; --mono:"Courier New",Courier,monospace;
+    --serif:Georgia,"Times New Roman",serif; --sans:"Helvetica Neue",Arial,sans-serif;
+  }
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper); color:var(--ink); font-family:var(--sans);
+    font-size:15px; line-height:1.55; -webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(rgba(20,18,14,.035) 1px,transparent 1px),
+                     radial-gradient(rgba(20,18,14,.025) 1px,transparent 1px);
+    background-size:7px 7px,11px 11px; background-position:0 0,3px 5px;
+  }
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--accent);color:var(--paper)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+
+  /* ===== HEADER ===== */
+  header.site{border-bottom:2px solid var(--line);background:var(--paper);position:sticky;top:0;z-index:50}
+  .header-inner{display:flex;align-items:center;justify-content:space-between;height:64px;gap:24px}
+  .brand{display:flex;align-items:baseline;gap:10px;font-family:var(--serif);font-weight:700;font-size:26px;letter-spacing:-.02em}
+  .brand .dot{color:var(--accent)}
+  .brand small{font-family:var(--mono);font-size:10px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:2px 6px;transform:translateY(-4px)}
+  nav.main{display:flex;gap:4px}
+  nav.main a{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.06em;padding:8px 12px;border:1px solid transparent;transition:.15s}
+  nav.main a:hover{border-color:var(--line);background:var(--paper-2)}
+  nav.main a.active{background:var(--ink);color:var(--paper)}
+
+  /* ===== PAGE HEAD ===== */
+  .page-head{padding:48px 0 28px;border-bottom:1px solid var(--line);margin-bottom:36px}
+  .page-head .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .page-head .kicker::before{content:"";width:28px;height:1px;background:var(--accent)}
+  .page-head h1{font-family:var(--serif);font-size:clamp(34px,5vw,52px);line-height:1.02;letter-spacing:-.03em;font-weight:700;max-width:16ch}
+  .page-head p.lead{margin-top:14px;max-width:56ch;color:var(--muted)}
+
+  /* ===== HERO ===== */
+  .hero{padding:56px 0 40px;display:grid;grid-template-columns:1.3fr .9fr;gap:44px;align-items:end}
+  .hero h1{font-family:var(--serif);font-weight:700;font-size:clamp(46px,7vw,84px);line-height:.94;letter-spacing:-.035em}
+  .hero h1 em{font-style:italic;color:var(--accent)}
+  .hero p{margin-top:20px;max-width:44ch;color:var(--muted)}
+  .hero-meta{border-left:1px solid var(--line);padding-left:22px;font-family:var(--mono);font-size:12px;line-height:2;color:var(--muted)}
+  .hero-meta strong{color:var(--ink)}
+  .hero-meta .stat{display:flex;justify-content:space-between;gap:20px;border-bottom:1px dotted var(--paper-2)}
+
+  /* ===== SECTION HEAD ===== */
+  .sec-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:52px 0 22px}
+  .sec-head h2{font-family:var(--serif);font-size:26px;font-weight:700;letter-spacing:-.02em}
+  .sec-head .idx{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+  .sec-head .line{flex:1;height:1px;background:var(--line);opacity:.25}
+
+  /* ===== CARD GRID ===== */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .card{border:1px solid var(--line);background:var(--paper);display:flex;flex-direction:column;transition:.18s ease;position:relative}
+  .card:hover{transform:translate(-3px,-3px);box-shadow:4px 4px 0 var(--ink)}
+  .card .thumb{aspect-ratio:16/9;background:var(--paper-2);border-bottom:1px solid var(--line);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  .card .thumb .glyph{font-family:var(--serif);font-size:52px;font-weight:700;color:var(--ink);opacity:.18;user-select:none}
+  .card .thumb .icon-wrap{width:64px;height:64px;display:flex;align-items:center;justify-content:center;position:relative}
+  .card .thumb .icon-wrap img{width:56px;height:56px;object-fit:contain;filter:grayscale(.15) contrast(1.05);transition:transform .18s}
+  .card:hover .thumb .icon-wrap img{transform:scale(1.08)}
+  .card .thumb .tag{position:absolute;top:10px;left:10px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:3px 7px}
+  .card .thumb .tag.alt{background:var(--accent-2)}
+  .card .body{padding:16px 16px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+  .card h3{font-family:var(--serif);font-size:19px;line-height:1.2;font-weight:700;letter-spacing:-.01em}
+  .card .desc{font-size:13px;color:var(--muted);flex:1}
+  .card .foot{display:flex;justify-content:space-between;align-items:center;border-top:1px dotted var(--paper-2);padding-top:10px;margin-top:4px;font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+  .card .foot .ver{color:var(--ink)}
+
+  /* ===== BUTTONS ===== */
+  .btn{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:11px 18px;border:1px solid var(--line);background:var(--paper);cursor:pointer;transition:.15s;color:var(--ink)}
+  .btn:hover{background:var(--ink);color:var(--paper)}
+  .btn.solid{background:var(--ink);color:var(--paper)}
+  .btn.solid:hover{background:var(--accent);border-color:var(--accent)}
+  .btn.accent{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+  .btn.accent:hover{background:var(--ink);border-color:var(--ink)}
+  .btn.block{width:100%;justify-content:center}
+  .btn .arrow{transition:transform .15s}
+  .btn:hover .arrow{transform:translateX(3px)}
+
+  /* ===== SEARCH ===== */
+  .search-bar{display:flex;border:2px solid var(--line);background:var(--paper);margin-bottom:22px}
+  .search-bar input{flex:1;border:none;background:transparent;padding:16px 18px;font-family:var(--serif);font-size:20px;color:var(--ink);outline:none}
+  .search-bar input::placeholder{color:var(--muted);font-style:italic}
+  .search-bar button{border:none;border-left:2px solid var(--line);background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:0 26px;cursor:pointer;transition:.15s}
+  .search-bar button:hover{background:var(--accent)}
+
+  .filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:30px}
+  .chip{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:7px 13px;border:1px solid var(--line);background:transparent;cursor:pointer;transition:.15s;color:var(--ink)}
+  .chip:hover{background:var(--paper-2)}
+  .chip.active{background:var(--ink);color:var(--paper)}
+
+  .result-count{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+  .result-count b{color:var(--ink)}
+
+  /* ===== LIBRARY ===== */
+  .lib-list{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+  .lib-row{display:grid;grid-template-columns:64px 1fr auto auto;gap:20px;align-items:center;padding:18px 4px;border-bottom:1px solid var(--line);transition:.15s}
+  .lib-row:hover{background:var(--paper-2);padding-left:12px}
+  .lib-row .mini{width:64px;height:44px;background:var(--paper-2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:20px;opacity:.6}
+  .lib-row .mini img{width:28px;height:28px;object-fit:contain;filter:grayscale(.15)}
+  .lib-row h3{font-family:var(--serif);font-size:18px;font-weight:700}
+  .lib-row .sub{font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+  .lib-row .status{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:4px 9px;border:1px solid var(--line)}
+  .lib-row .status.installed{background:var(--accent-2);color:var(--paper);border-color:var(--accent-2)}
+  .lib-row .status.update{background:var(--accent);color:var(--paper);border-color:var(--accent)}
+
+  /* ===== DETAIL ===== */
+  .detail-grid{display:grid;grid-template-columns:1.4fr .8fr;gap:44px;align-items:start}
+  .breadcrumb{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
+  .breadcrumb a:hover{color:var(--accent)}
+  .breadcrumb span{margin:0 8px;opacity:.5}
+  .detail-hero{aspect-ratio:16/8;border:1px solid var(--line);background:var(--paper-2);margin-bottom:26px;display:flex;align-items:center;justify-content:center;position:relative}
+  .detail-hero .glyph{font-family:var(--serif);font-size:110px;font-weight:700;opacity:.13}
+  .detail-hero .icon-wrap{width:132px;height:132px;display:flex;align-items:center;justify-content:center}
+  .detail-hero .icon-wrap img{width:120px;height:120px;object-fit:contain;filter:grayscale(.1) contrast(1.05)}
+  .detail-hero .badge{position:absolute;top:14px;left:14px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:4px 9px}
+  .detail h1{font-family:var(--serif);font-size:clamp(32px,4vw,44px);line-height:1.05;letter-spacing:-.03em;font-weight:700}
+  .detail .meta-row{display:flex;flex-wrap:wrap;gap:18px;margin:16px 0 24px;font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+  .detail .meta-row b{color:var(--ink)}
+  .detail .prose p{margin-bottom:14px;color:#3a352c}
+  .detail .prose h2{font-family:var(--serif);font-size:22px;margin:26px 0 10px;letter-spacing:-.01em}
+  .detail .prose ul{margin:0 0 14px 20px;color:#3a352c}
+  .detail .prose li{margin-bottom:6px}
+
+  /* ===== SIDE CARD ===== */
+  .side-card{border:1px solid var(--line);padding:22px;background:var(--paper);position:sticky;top:88px}
+  .side-card .price{font-family:var(--serif);font-size:20px;margin-bottom:4px}
+  .side-card .price small{font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:8px}
+  .side-card .specs{margin:18px 0;border-top:1px dotted var(--line);padding-top:16px}
+  .side-card .specs .row{display:flex;justify-content:space-between;gap:12px;font-family:var(--mono);font-size:11px;padding:6px 0;text-transform:uppercase;letter-spacing:.04em}
+  .side-card .specs .row span:first-child{color:var(--muted)}
+  .side-card .note{font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.6;margin-top:14px;padding-top:14px;border-top:1px dotted var(--line)}
+
+  /* ===== DOWNLOAD ===== */
+  .dl-wrap{max-width:640px;margin:0 auto;padding:20px 0 80px}
+  .dl-box{border:2px solid var(--line);background:var(--paper)}
+  .dl-box .head{padding:16px 22px;border-bottom:2px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.1em}
+  .dl-box .head .live{display:flex;align-items:center;gap:8px;color:var(--accent-2)}
+  .dl-box .head .live::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent-2);animation:pulse 1.6s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .dl-box .body{padding:30px 26px;text-align:center}
+  .dl-box .file-icon{width:88px;height:88px;margin:0 auto 20px;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:30px;font-weight:700;background:var(--paper-2);position:relative}
+  .dl-box .file-icon img{width:56px;height:56px;object-fit:contain;opacity:.85}
+  .dl-box .file-icon .ext{position:absolute;bottom:-10px;right:-10px;background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:9px;letter-spacing:.08em;padding:2px 6px}
+  .dl-box h1{font-family:var(--serif);font-size:26px;letter-spacing:-.02em;margin-bottom:6px}
+  .dl-box .filename{font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:24px;word-break:break-all}
+  .dl-box .progress{height:6px;background:var(--paper-2);border:1px solid var(--line);margin-bottom:8px;overflow:hidden}
+  .dl-box .progress .bar{height:100%;width:0%;background:var(--accent);transition:width .3s ease}
+  .dl-box .progress-label{font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:26px}
+  .dl-box .checksum{margin-top:22px;padding-top:18px;border-top:1px dotted var(--line);font-family:var(--mono);font-size:10px;color:var(--muted);text-align:left;line-height:1.7}
+  .dl-box .checksum b{color:var(--ink)}
+  .dl-steps{margin-top:26px;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+  .dl-steps .step{background:var(--paper);padding:16px 14px}
+  .dl-steps .step .n{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.1em;margin-bottom:6px}
+  .dl-steps .step p{font-size:12px;color:var(--muted)}
+
+  /* ===== FOOTER ===== */
+  footer.site{border-top:2px solid var(--line);margin-top:70px;padding:34px 0 40px}
+  .foot-inner{display:flex;justify-content:space-between;align-items:flex-start;gap:30px;flex-wrap:wrap}
+  .foot-inner .brand{font-size:22px}
+  .foot-inner .copy{font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;line-height:1.9;text-align:right}
+  .foot-links{display:flex;gap:18px;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+  .foot-links a{border-bottom:1px solid transparent}
+  .foot-links a:hover{border-color:var(--accent);color:var(--accent)}
+
+  /* ===== STATE ===== */
+  .loading{padding:80px 0;text-align:center;font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .error{padding:60px 0;text-align:center;font-family:var(--mono);font-size:12px;color:var(--accent);line-height:1.9}
+  .error code{background:var(--ink);color:var(--paper);padding:2px 6px}
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width:900px){
+    .hero{grid-template-columns:1fr;gap:24px}
+    .grid{grid-template-columns:repeat(2,1fr)}
+    .detail-grid{grid-template-columns:1fr}
+    .side-card{position:static}
+  }
+  @media (max-width:620px){
+    .wrap{padding:0 18px}
+    nav.main a{padding:8px 8px;font-size:10px}
+    .brand{font-size:21px}
+    .brand small{display:none}
+    .grid{grid-template-columns:1fr}
+    .lib-row{grid-template-columns:48px 1fr;gap:12px}
+    .lib-row .mini{width:48px;height:36px;font-size:15px}
+    .lib-row .mini img{width:22px;height:22px}
+    .lib-row .status,.lib-row .lib-act{display:none}
+    .dl-steps{grid-template-columns:1fr}
+    .foot-inner{flex-direction:column}
+    .foot-inner .copy{text-align:left}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="site">
+  <div class="wrap header-inner">
+    <a class="brand" href="#" data-page="home">MyMods<span class="dot">.</span><small>mod app &amp; game</small></a>
+    <nav class="main" id="mainnav">
+      <a href="#" data-page="home">Home</a>
+      <a href="#" data-page="search">Cari</a>
+      <a href="#" data-page="library">Library</a>
+      <a href="#" data-page="detail">Detail</a>
+      <a href="#" data-page="download">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="app">
+  <div class="wrap"><div class="loading">Memuat arsip mod…</div></div>
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="site">
+  <div class="wrap foot-inner">
+    <div>
+      <div class="brand">MyMods<span class="dot">.</span></div>
+      <div class="foot-links" style="margin-top:12px">
+        <a href="#" data-page="home">Home</a>
+        <a href="#" data-page="search">Cari</a>
+        <a href="#" data-page="library">Library</a>
+      </div>
+    </div>
+    <div class="copy">
+      Arsip mod independen — aplikasi &amp; game.<br>
+      Semua berkas diunggah komunitas. Gunakan dengan bijak.<br>
+      &copy; 2024 MyMods. Tidak berafiliasi dengan developer asli.
+    </div>
+  </div>
+</footer>
+
+<script>
+/* =========================================================
+   STATE
+   ========================================================= */
+const STATE = {
+  mods: [],
+  library: [],
+  stats: { modsTotal:0, contributors:0, updateCycle:'-' },
+  ready: false,
+  error: null
+};
+
+const DATA_URL = 'mods.json';
+
+async function loadData(){
+  try{
+    const res = await fetch(DATA_URL, { cache: 'no-cache' });
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+    STATE.mods = Array.isArray(json.mods) ? json.mods : [];
+    STATE.library = Array.isArray(json.library) ? json.library : [];
+    if(json.stats) STATE.stats = json.stats;
+    STATE.ready = true;
+  }catch(err){
+    STATE.error = err.message;
+  }
+}
+
+/* =========================================================
+   ICON HELPER (URL + fallback glyph)
+   ========================================================= */
+function iconMarkup(m){
+  if(!m.icon) return `<span class="glyph">${m.glyph}</span>`;
+  return `<span class="icon-wrap">
+    <img src="${m.icon}" alt="Icon ${m.name}" loading="lazy"
+         onerror="this.parentNode.innerHTML='<span class=&quot;glyph&quot;>${m.glyph}</span>'">
+  </span>`;
+}
+
+/* =========================================================
+   KOMPONEN
+   ========================================================= */
+function card(m){
+  return `
+  <a class="card" href="#" data-page="detail" data-id="${m.id}">
+    <div class="thumb">
+      ${iconMarkup(m)}
+      <span class="tag ${m.tagAlt?'alt':''}">${m.tag}</span>
+    </div>
+    <div class="body">
+      <h3>${m.name}</h3>
+      <p class="desc">${m.desc}</p>
+      <div class="foot">
+        <span>${m.app}</span>
+        <span class="ver">${m.ver}</span>
+      </div>
+    </div>
+  </a>`;
+}
+
+function secHead(idx, title){
+  return `<div class="sec-head">
+    <span class="idx">${idx}</span>
+    <span class="line"></span>
+    <h2>${title}</h2>
+  </div>`;
+}
+
+/* =========================================================
+   HALAMAN
+   ========================================================= */
+function pageHome(){
+  const s = STATE.stats;
+  return `
+  <div class="wrap">
+    <section class="hero">
+      <div>
+        <h1>Mod<br><em>tanpa</em><br>nonsense.</h1>
+        <p>Arsip mod aplikasi &amp; game yang dikurasi manual. Tanpa pop-up, tanpa redirect, tanpa drama. Pilih, unduh, pasang.</p>
+      </div>
+      <div class="hero-meta">
+        <div class="stat"><strong>Mod tersedia</strong><span>${s.modsTotal}</span></div>
+        <div class="stat"><strong>Kontributor</strong><span>${s.contributors}</span></div>
+        <div class="stat"><strong>Pembaruan</strong><span>${s.updateCycle}</span></div>
+        <div class="stat"><strong>Lisensi</strong><span>komunitas</span></div>
+      </div>
+    </section>
+
+    ${secHead('01 / terbaru','Rilis terbaru')}
+    <div class="grid">${STATE.mods.slice(0,3).map(card).join('')}</div>
+
+    ${secHead('02 / populer','Paling diunduh')}
+    <div class="grid">${STATE.mods.slice(3,6).map(card).join('')}</div>
+
+    <div style="margin-top:46px;text-align:center">
+      <a class="btn solid" href="#" data-page="search">Jelajahi semua mod <span class="arrow">→</span></a>
+    </div>
+  </div>`;
+}
+
+function pageSearch(){
+  return `
+  <div class="wrap">
+    <div class="page-head">
+      <div class="kicker">Pencarian</div>
+      <h1>Temukan mod yang tepat.</h1>
+      <p class="lead">Cari berdasarkan nama, platform, atau kategori. Filter bekerja instan.</p>
+    </div>
+
+    <form class="search-bar" id="searchForm">
+      <input type="text" id="q" placeholder="mis. neon, focusnote, game…" autocomplete="off">
+      <button type="submit">Cari</button>
+    </form>
+
+    <div class="filters" id="filters">
+      <button class="chip active" data-filter="all">Semua</button>
+      <button class="chip" data-filter="game">Game</button>
+      <button class="chip" data-filter="app">Aplikasi</button>
+      <button class="chip" data-filter="Android">Android</button>
+      <button class="chip" data-filter="Windows">Windows</button>
+    </div>
+
+    <div class="result-count" id="resultCount"></div>
+    <div class="grid" id="results"></div>
+  </div>`;
+}
+
+function renderSearchResults(q='', filter='all'){
+  const term = q.toLowerCase().trim();
+  const list = STATE.mods.filter(m=>{
+    const matchQ = !term || m.name.toLowerCase().includes(term) || m.desc.toLowerCase().includes(term) || m.app.toLowerCase().includes(term);
+    const matchF = filter==='all' || m.cat===filter || m.app===filter;
+    return matchQ && matchF;
+  });
+  const rc = document.getElementById('resultCount');
+  const rs = document.getElementById('results');
+  if(rc) rc.innerHTML = `Menampilkan <b>${list.length}</b> dari <b>${STATE.mods.length}</b> mod`;
+  if(rs) rs.innerHTML = list.length
+    ? list.map(card).join('')
+    : `<div style="grid-column:1/-1;padding:40px 0;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em">Tidak ada hasil. Coba kata kunci lain.</div>`;
+}
+
+function pageLibrary(){
+  const rows = STATE.library.map(l=>{
+    const m = STATE.mods.find(x=>x.id===l.modId);
+    if(!m) return '';
+    const statusText = l.status==='installed' ? 'Terpasang' : 'Update tersedia';
+    const statusClass = l.status==='installed' ? 'installed' : 'update';
+    const miniIcon = m.icon
+      ? `<img src="${m.icon}" alt="" loading="lazy" onerror="this.replaceWith(document.createTextNode('${m.glyph}'))">`
+      : m.glyph;
+    return `
+    <div class="lib-row">
+      <div class="mini">${miniIcon}</div>
+      <div>
+        <h3><a href="#" data-page="detail" data-id="${m.id}">${m.name}</a></h3>
+        <div class="sub">${m.app} · ${m.ver} · ${m.size}</div>
+      </div>
+      <span class="status ${statusClass}">${statusText}</span>
+      <a class="btn lib-act" href="#" data-page="download" data-id="${m.id}" style="padding:7px 12px;font-size:10px">Buka</a>
+    </div>`;
+  }).join('');
+
+  return `
+  <div class="wrap">
+    <div class="page-head">
+      <div class="kicker">Library</div>
+      <h1>Koleksi terpasang.</h1>
+      <p class="lead">Mod yang kamu simpan dan pasang. Perbarui saat versi baru tersedia.</p>
+    </div>
+    <div class="lib-list">${rows || '<div class="loading">Library kosong.</div>'}</div>
+    <div style="margin-top:30px">
+      <a class="btn" href="#" data-page="search"><span class="arrow">←</span> Tambah mod lain</a>
+    </div>
+  </div>`;
+}
+
+function pageDetail(id){
+  const m = STATE.mods.find(x=>x.id===id) || STATE.mods[0];
+  if(!m) return `<div class="wrap"><div class="loading">Mod tidak ditemukan.</div></div>`;
+  return `
+  <div class="wrap detail">
+    <div class="breadcrumb" style="padding-top:36px">
+      <a href="#" data-page="home">Home</a><span>/</span>
+      <a href="#" data-page="search">Mod</a><span>/</span>
+      ${m.name}
+    </div>
+
+    <div class="detail-grid">
+      <div>
+        <div class="detail-hero">
+          ${iconMarkup(m)}
+          <span class="badge">${m.tag} · ${m.app}</span>
+        </div>
+        <h1>${m.name}</h1>
+        <div class="meta-row">
+          <span>Versi <b>${m.ver}</b></span>
+          <span>Ukuran <b>${m.size}</b></span>
+          <span>Platform <b>${m.app}</b></span>
+          <span>Diperbarui <b>${m.updated || '-'}</b></span>
+        </div>
+
+        <div class="prose">
+          <p>${m.long}</p>
+          <h2>Apa yang diubah</h2>
+          <ul>${(m.mods||[]).map(x=>`<li>${x}</li>`).join('')}</ul>
+          <h2>Catatan pemasangan</h2>
+          <p>Nonaktifkan verifikasi Play Protect bila perlu, lalu pasang APK secara manual. Untuk versi Windows, ekstrak arsip ke folder terpisah dan jalankan file utama.</p>
+        </div>
+      </div>
+
+      <aside>
+        <div class="side-card">
+          <div class="price"><small>unduhan</small>Gratis</div>
+          <a class="btn accent block" href="#" data-page="download" data-id="${m.id}" style="margin-top:16px">
+            Unduh mod <span class="arrow">↓</span>
+          </a>
+          <a class="btn block" href="#" data-page="library" style="margin-top:8px">Simpan ke library</a>
+
+          <div class="specs">
+            <div class="row"><span>Paket</span><span>${m.name.toLowerCase().replace(/\s/g,'-')}${m.app==='Windows'?'.zip':'.apk'}</span></div>
+            <div class="row"><span>Versi</span><span>${m.ver}</span></div>
+            <div class="row"><span>Ukuran</span><span>${m.size}</span></div>
+            <div class="row"><span>Kategori</span><span>${m.cat}</span></div>
+          </div>
+
+          <div class="note">Berkas di-host di mirror komunitas. Periksa checksum sebelum memasang. MyMods tidak bertanggung jawab atas kerusakan perangkat.</div>
+        </div>
+      </aside>
+    </div>
+  </div>`;
+}
+
+function pageDownload(id){
+  const m = STATE.mods.find(x=>x.id===id) || STATE.mods[0];
+  if(!m) return `<div class="wrap"><div class="loading">Mod tidak ditemukan.</div></div>`;
+  const ext = m.app==='Windows' ? 'ZIP' : 'APK';
+  const fname = m.name.toLowerCase().replace(/\s/g,'-') + '-' + m.ver + (m.app==='Windows'?'.zip':'.apk');
+  const fileIcon = m.icon
+    ? `<img src="${m.icon}" alt="" onerror="this.remove()"><span class="ext">${ext}</span>`
+    : `${ext}`;
+  return `
+  <div class="wrap">
+    <div class="breadcrumb" style="padding-top:36px">
+      <a href="#" data-page="home">Home</a><span>/</span>
+      <a href="#" data-page="detail" data-id="${m.id}">${m.name}</a><span>/</span>
+      Unduh
+    </div>
+
+    <div class="dl-wrap">
+      <div class="dl-box">
+        <div class="head">
+          <span>Berkas siap diunduh</span>
+          <span class="live">mirror aktif</span>
+        </div>
+        <div class="body">
+          <div class="file-icon">${fileIcon}</div>
+          <h1>${m.name} ${m.ver}</h1>
+          <div class="filename">${fname} · ${m.size}</div>
+
+          <div class="progress"><div class="bar" id="bar"></div></div>
+          <div class="progress-label" id="progressLabel">Menunggu tautan…</div>
+
+          <a class="btn accent block" href="${m.url}" id="downloadBtn" target="_blank" rel="noopener" style="padding:16px;font-size:13px">
+            Mulai unduhan <span class="arrow">↓</span>
+          </a>
+          <a class="btn block" href="#" data-page="detail" data-id="${m.id}" style="margin-top:10px;font-size:11px">
+            Kembali ke detail
+          </a>
+
+          <div class="checksum">
+            <b>SHA-256</b><br>
+            <span style="word-break:break-all">${m.sha256 || '-'}</span><br>
+            <b>Mirror</b> · mirror-01.mymods.archive / mirror-02
+          </div>
+        </div>
+      </div>
+
+      <div class="dl-steps">
+        <div class="step"><div class="n">01</div><p>Unduh berkas ke perangkat.</p></div>
+        <div class="step"><div class="n">02</div><p>Izinkan pemasangan dari sumber tidak dikenal.</p></div>
+        <div class="step"><div class="n">03</div><p>Pasang &amp; jalankan mod.</p></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* =========================================================
+   ROUTER
+   ========================================================= */
+const app = document.getElementById('app');
+
+function render(page, id){
+  document.querySelectorAll('#mainnav a').forEach(a=>{
+    a.classList.toggle('active', a.dataset.page===page);
+  });
+
+  if(!STATE.ready){
+    app.innerHTML = `<div class="wrap"><div class="error">
+      Gagal memuat data dari <b>${DATA_URL}</b>.<br>
+      ${STATE.error ? `Detail: ${STATE.error}<br>` : ''}
+      Pastikan file JSON ada dan jalankan lewat server lokal:<br>
+      <code>python3 -m http.server 8000</code>
+    </div></div>`;
+    return;
+  }
+
+  switch(page){
+    case 'home': app.innerHTML = pageHome(); break;
+    case 'search': app.innerHTML = pageSearch(); bindSearch(); break;
+    case 'library': app.innerHTML = pageLibrary(); break;
+    case 'detail': app.innerHTML = pageDetail(id); break;
+    case 'download': app.innerHTML = pageDownload(id); animateDownload(); break;
+    default: app.innerHTML = pageHome();
+  }
+  window.scrollTo({top:0, behavior:'instant'});
+}
+
+function bindSearch(){
+  const input = document.getElementById('q');
+  const form = document.getElementById('searchForm');
+  const chips = document.querySelectorAll('#filters .chip');
+  let activeFilter = 'all';
+  const run = ()=> renderSearchResults(input.value, activeFilter);
+
+  form.addEventListener('submit', e=>{ e.preventDefault(); run(); });
+  input.addEventListener('input', run);
+  chips.forEach(c=>c.addEventListener('click', ()=>{
+    chips.forEach(x=>x.classList.remove('active'));
+    c.classList.add('active');
+    activeFilter = c.dataset.filter;
+    run();
+  }));
+  run();
+}
+
+function animateDownload(){
+  const bar = document.getElementById('bar');
+  const label = document.getElementById('progressLabel');
+  if(!bar) return;
+  let p = 0;
+  label.textContent = 'Menyiapkan tautan…';
+  const t = setInterval(()=>{
+    p += Math.random()*18 + 6;
+    if(p >= 100){
+      p = 100; clearInterval(t);
+      label.textContent = 'Tautan siap · klik tombol di bawah';
+    } else {
+      label.textContent = 'Memverifikasi berkas… ' + Math.floor(p) + '%';
+    }
+    bar.style.width = p + '%';
+  }, 380);
+}
+
+/* interaksi global */
+document.addEventListener('click', e=>{
+  const link = e.target.closest('[data-page]');
+  if(!link) return;
+  e.preventDefault();
+  render(link.dataset.page, link.dataset.id);
+});
+
+/* =========================================================
+   BOOT
+   ========================================================= */
+(async ()=>{
+  await loadData();
+  render('home');
+})();
+</script>
+</body>
+</html>
